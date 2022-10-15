@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class ParameterGenerator {
     public static void main(String[] args) {
@@ -36,6 +36,30 @@ public class ParameterGenerator {
                 trafficDemands[i][j] = Math.abs(digits[i] - digits[j]);
             }
         }
+
+        //initializes all values to 0, handles i==j by itself
+        int[][] edgeWeightsCosts = new int[NODES][NODES];
+        Set<Integer> randomIndices = new HashSet<>();
+        Random random = new Random();
+
+        for (int i = 0; i < NODES; i++) {
+            randomIndices.clear();
+            while (randomIndices.size() < k) {
+                int randomNumber = random.nextInt(NODES);
+                if (randomNumber != i) {
+                    randomIndices.add(randomNumber);
+                }
+            }
+            for (int j = 0; j < NODES; j++) {
+                if (randomIndices.contains(j)) {
+                    edgeWeightsCosts[i][j] = 1;
+                } else if (i != j) {
+                    edgeWeightsCosts[i][j] = 100;
+                }
+            }
+        }
+        MultiCommodityFlowComputer multiCommodityFlowComputer = new MultiCommodityFlowComputer(k, NODES, edgeWeightsCosts, trafficDemands);
+        multiCommodityFlowComputer.compute();
 
     }
 }
