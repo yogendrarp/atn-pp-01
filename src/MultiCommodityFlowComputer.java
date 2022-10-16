@@ -13,28 +13,12 @@ public class MultiCommodityFlowComputer {
     }
 
     public void compute() {
-        System.out.println();
-        System.out.println("Computed Edge Weight Costs Matrix is below");
-        Utility.printMatrix(edgeWeightsCosts);
-        System.out.printf("\n\n\n");
-
-        System.out.println("Computed Traffic Demand Matrix is below");
-        Utility.printMatrix(trafficDemands);
-        System.out.printf("\n\n\n");
-
         floydWarshallShortestPath();
-        System.out.println("All source shortestpath Matrix is below");
-        Utility.printMatrix(allSourceShortestPathMatrix);
-        System.out.printf("\n\n\n");
-        computeAndPrintMultiCommodityFlow();
-    }
-
-    private void computeAndPrintMultiCommodityFlow() {
+        float networkDensity = networkDensity();
         long zOpt = optimumMinFlow();
-        float density = networkDensity();
-        System.out.printf("The optimum multicommodity flow is %d\n", zOpt);
-        System.out.printf("The density of the network is %f\n", density);
-
+        OutputGenerator outputGenerator = new OutputGenerator(networkDensity, zOpt,
+                allSourceShortestPathMatrix, edgeWeightsCosts, trafficDemands);
+        outputGenerator.displayOutput();
     }
 
     private long optimumMinFlow() {
